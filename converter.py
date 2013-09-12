@@ -75,6 +75,10 @@ def _convert_format_0(fname, fileid, f_out, f_out_multi, encode="cp932"):
                 
                 if eng.startswith(u"■"):
                     eng = eng[1:]
+                elif (u"<" in eng) or (u">" in eng):
+                    #FIXME Ignoe
+                    continue
+
                 if is_multi_lines(eng, jpn):
                     output(f_out_multi, eng, jpn, fileid, lid)
                 else:
