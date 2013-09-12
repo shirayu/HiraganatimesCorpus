@@ -17,6 +17,10 @@ import optparse
 import codecs
 import os.path
 
+import nltk.tokenize
+import re
+jp_sent_tokenizer = nltk.tokenize.RegexpTokenizer(u'[^。]+。')
+
 def load_from_stdin():
     in_encoding = sys.stdin.encoding
     if in_encoding is None:
@@ -44,9 +48,16 @@ def output(f_out, eng, jpn, name, lid):
 
 def _convert_format_0(fname, fileid, f_out, f_out_multi, encode="cp932"):
     def is_multi_lines(eng, jpn):
+        #check jpn includes only one sentence
         kuten_position = jpn.find(u"。") 
         if kuten_position !=-1 and (kuten_position!= len(jpn)-1):
             return True
+
+        #check eng includes only one sentence
+        tmp_eng_lines = nltk.tokenize.sent_tokenize(eng)
+        if len(tmp_eng_lines) != 1:
+            return True
+
         return False
 
 
@@ -80,9 +91,6 @@ def is_English(line):
 
 
 
-import nltk.tokenize
-import re
-jp_sent_tokenizer = nltk.tokenize.RegexpTokenizer(u'[^。]+。')
 def _convert_format_1(fname, fileid, f_out, f_out_multi, encode="cp932"):
 
     def getLines(pair):
