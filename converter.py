@@ -72,7 +72,9 @@ def _convert_format_0(fname, fileid, f_out, f_out_multi, encode="cp932"):
                     or jpn == u"（和訳なし）" \
                     or len(eng) == 0 or len(jpn) == 0:
                     continue
-
+                
+                if eng.startswith(u"■"):
+                    eng = eng[1:]
                 if is_multi_lines(eng, jpn):
                     output(f_out_multi, eng, jpn, fileid, lid)
                 else:
